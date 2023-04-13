@@ -1,0 +1,6 @@
+server:
+  port: 9999
+
+spring.application.name: templateapp
+
+logging.config: file:./log4j2.xml

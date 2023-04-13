@@ -1,0 +1,84 @@
+################################################################################
+#  组件相关配置
+################################################################################
+
+
+# 请将application.yml中配置复制于此
+
+
+
+################################################################################
+#  微服务相关配置
+################################################################################
+bsfit.common.cloud:
+  ## 注册中心选型 nacos  /  eureka / consul
+  discovery: nacos
+  ## 配置中心选型 nacos  / consul
+  config: nacos
+
+## consul 相关配置
+spring.cloud.consul:
+  # consul agent hostname
+  host: 10.100.1.21
+  # consul agent port
+  port: 8600
+  ## consul discovery props
+  discovery:
+    # Use ip address rather than hostname during registration
+    preferIpAddress: true
+    # Unique service instance id
+    instanceId: ${spring.application.name}-${spring.cloud.client.ip-address}-${server.port}
+    # Timeout to deregister services critical for longer than timeout 5 minutes
+    healthCheckCriticalTimeout: 5m
+    # Timeout for health check
+    healthCheckTimeout: 10s
+  config:
+    # the config prefix
+    prefix: bsfit
+    # the consul config default context, 公共配置
+    defaultContext: public
+    # the consul config file format
+    format: YAML
+    # the consul config profile separator
+    profile-separator: '-'
+
+## nacos 相关配置
+spring.cloud.nacos:
+  ## nacos discovery props
+  discovery:
+    # nacos discovery server address.
+    server-addr: 10.100.2.243:8848
+  ## nacos config center props
+  config:
+    # nacos config server address
+    server-addr: 10.100.2.243:8848
+    ## the file extension of config content
+    file-extension: yml
+    ## a set of extensional configurations
+    extension-configs:
+      #  the data id of extended configuration,公共配置
+      - data-id: application-mysql-public.yml
+        # whether to support dynamic refresh
+        refresh: true
+
+## eureka 相关配置
+eureka:
+  instance:
+    # the IP address of the server should be used in preference to the hostname reported by the OS
+    preferIpAddress: true
+    # Get the unique Id (within the scope of the appName) of this instance to be registered with eureka.
+    instanceId: ${spring.application.name}-${spring.cloud.client.ip-address}-${server.port}
+  client:
+    serviceUrl:
+      ## eureka service address
+      defaultZone: http://10.100.1.13:9874/eureka/
+
+## 支持bean重复覆盖
+spring.main.allow-bean-definition-overriding: true
+## 支持bean循环引用
+spring.main.allow-circular-references: true
+
+spring.mvc:
+  pathmatch:
+    # 配置策略
+    matching-strategy: ant-path-matcher

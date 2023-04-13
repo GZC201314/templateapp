@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <groupId>cn.com.bsfit</groupId>
+        <artifactId>bsfit-root</artifactId>
+        <!-- todo root 的版本 请根据自己所处的解决方案的版本规划文件中：bsfit-root的具体版本为准-->
+        <version>2.0.0-1.3</version>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+    <version>${revision}</version>
+    <packaging>pom</packaging>
+    <modules>
+        <module>bsfit-templateapp-application</module>
+        <module>bsfit-templateapp-service</module>
+        <module>bsfit-templateapp-client</module>
+    </modules>
+
+    <artifactId>bsfit-templateapp</artifactId>
+
+    <properties>
+        <!--        新应用默认就是从1.0.0开始 -->
+        <revision>1.0.0</revision>
+        <maven.compiler.source>8</maven.compiler.source>
+        <maven.compiler.target>8</maven.compiler.target>
+    </properties>
+
+</project>
