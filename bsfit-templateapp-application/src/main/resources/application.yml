@@ -1,8 +1,12 @@
 server:
   port: 9999
 
-spring.application.name: templateapp
+spring.application.name: namelist
 
-logging.config: file:./log4j2.xml
+#logging.config: classpath:./log4j2.xml
+
+spring:
+  profiles:
+    active: dev
 
 
