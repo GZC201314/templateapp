@@ -33,5 +33,12 @@ public class NamelistRecordVO implements Serializable {
     @JsonFormat(pattern = "yyyy-MM-dd HH:mm:ss", timezone = "GMT+8")
     private LocalDateTime modifyTime;
 
+    /**
+     * 分页 参数
+     */
+    private Page page;
+
+    private Integer current;
+    private Integer size;
 
 }

@@ -7,6 +7,7 @@ import cn.com.bsfit.templateapp.service.entity.NamelistType;
 import cn.com.bsfit.templateapp.service.service.INamelistRecordService;
 import cn.com.bsfit.templateapp.service.service.INamelistTypeService;
 import cn.com.bsfit.templateapp.service.vo.NamelistRecordVO;
+import cn.com.bsfit.templateapp.service.vo.Page;
 import cn.hutool.core.collection.CollUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.junit.jupiter.api.Assertions;
@@ -16,6 +17,7 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.junit4.AbstractTransactionalJUnit4SpringContextTests;
+import org.springframework.util.StringUtils;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
@@ -104,6 +106,21 @@ public class NameListTest extends AbstractTransactionalJUnit4SpringContextTests 
         oldNamelistRecord.setModifyTime(LocalDateTime.now());
         boolean result = namelistRecordService.updateById(oldNamelistRecord);
         Assertions.assertTrue(result);
+    }
+    @DisplayName("查询黑名单")
+    @Test
+    public void queryNameListRecord() {
+        NamelistRecordVO namelistRecordVO = new NamelistRecordVO();
+        Page page = new Page();
+        page.setPage(1);
+        page.setPageSize(10);
+        QueryWrapper<NamelistRecord> namelistRecordQueryWrapper = new QueryWrapper<>();
+        if (StringUtils.hasText(namelistRecordVO.getNumber())){
+            namelistRecordQueryWrapper.like("number",namelistRecordVO.getNumber());
+        }
+        com.baomidou.mybatisplus.extension.plugins.pagination.Page<NamelistRecord> recordPage = new com.baomidou.mybatisplus.extension.plugins.pagination.Page<>(namelistRecordVO.getPage().getPage(), namelistRecordVO.getPage().getPageSize());
+        com.baomidou.mybatisplus.extension.plugins.pagination.Page<NamelistRecord> namelistRecordPage = namelistRecordService.page(recordPage, namelistRecordQueryWrapper);
+        Assertions.assertTrue(Objects.nonNull(namelistRecordPage));
     }
 
 }

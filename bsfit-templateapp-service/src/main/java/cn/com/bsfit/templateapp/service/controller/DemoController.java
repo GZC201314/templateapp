@@ -10,8 +10,10 @@ import cn.com.bsfit.templateapp.service.vo.NamelistTypeVO;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Bean;
+import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
@@ -92,8 +94,20 @@ public class DemoController {
             return BsfitResponse.successWithMsg("更新黑名单成功");
         }
         return BsfitResponse.failedWithError("更新黑名单失败");
+    }
 
-
+    @PostMapping("/queryRecord")
+    public BsfitResponse queryRecord(@RequestBody NamelistRecordVO namelistRecordVO){
+        if (Objects.isNull(namelistRecordVO)||Objects.isNull(namelistRecordVO.getPage())){
+            return BsfitResponse.failedWithError("查询黑名单失败,参数错误");
+        }
+        QueryWrapper<NamelistRecord> namelistRecordQueryWrapper = new QueryWrapper<>();
+        if (StringUtils.hasText(namelistRecordVO.getNumber())){
+            namelistRecordQueryWrapper.like("number",namelistRecordVO.getNumber());
+        }
+        Page<NamelistRecord> page = new Page<>(namelistRecordVO.getPage().getPage(), namelistRecordVO.getPage().getPageSize());
+        Page<NamelistRecord> namelistRecordPage = namelistRecordService.page(page, namelistRecordQueryWrapper);
+        return BsfitResponse.successWithData(namelistRecordPage);
     }
 
 }
