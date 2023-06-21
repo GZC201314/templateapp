@@ -7,6 +7,8 @@ import cn.com.bsfit.templateapp.service.service.INamelistRecordService;
 import cn.com.bsfit.templateapp.service.service.INamelistTypeService;
 import cn.com.bsfit.templateapp.service.vo.NamelistRecordVO;
 import cn.com.bsfit.templateapp.service.vo.NamelistTypeVO;
+import cn.hutool.core.collection.CollUtil;
+import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Bean;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Objects;
 
 /**
@@ -68,4 +71,29 @@ public class DemoController {
         }
         return BsfitResponse.failedWithError("新增黑名单失败,参数错误");
     }
+
+    @PostMapping("/updateRecord")
+    public BsfitResponse updateRecord(@RequestBody NamelistRecordVO namelistRecordVO){
+        if (Objects.isNull(namelistRecordVO)){
+            return BsfitResponse.failedWithError("更新黑名单失败,参数错误");
+        }
+        // 查询新值是否已存在
+        QueryWrapper<NamelistRecord> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("number",namelistRecordVO.getNumber());
+        List<NamelistRecord> list = namelistRecordService.list(queryWrapper);
+        if (!CollUtil.isEmpty(list)){
+            return BsfitResponse.failedWithError("修改后的值已在名单中，请重新输入后再试");
+        }
+        NamelistRecord oldNamelistRecord = namelistRecordService.getById(namelistRecordVO.getId());
+        oldNamelistRecord.setNumber(namelistRecordVO.getNumber());
+        oldNamelistRecord.setModifyTime(LocalDateTime.now());
+        boolean result = namelistRecordService.updateById(oldNamelistRecord);
+        if (result){
+            return BsfitResponse.successWithMsg("更新黑名单成功");
+        }
+        return BsfitResponse.failedWithError("更新黑名单失败");
+
+
+    }
+
 }
