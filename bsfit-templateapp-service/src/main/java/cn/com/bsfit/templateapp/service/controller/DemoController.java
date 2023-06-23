@@ -10,6 +10,7 @@ import cn.com.bsfit.templateapp.service.vo.NamelistTypeVO;
 import cn.hutool.core.collection.CollUtil;
 import cn.hutool.core.collection.CollectionUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
+import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.BeanUtils;
 import org.springframework.context.annotation.Bean;
@@ -18,6 +19,7 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -104,8 +106,13 @@ public class DemoController {
         QueryWrapper<NamelistRecord> namelistRecordQueryWrapper = new QueryWrapper<>();
         if (StringUtils.hasText(namelistRecordVO.getNumber())){
             namelistRecordQueryWrapper.like("number",namelistRecordVO.getNumber());
-        }
+        }List<OrderItem> orders = new ArrayList<>();
+        OrderItem orderItem = new OrderItem();
+        orderItem.setColumn("modify_time"); // 设置排序字段为name
+        orderItem.setAsc(false); // 设置升序排序
+        orders.add(orderItem);
         Page<NamelistRecord> page = new Page<>(namelistRecordVO.getPage().getPage(), namelistRecordVO.getPage().getPageSize());
+        page.setOrders(orders);
         Page<NamelistRecord> namelistRecordPage = namelistRecordService.page(page, namelistRecordQueryWrapper);
         return BsfitResponse.successWithData(namelistRecordPage);
     }
