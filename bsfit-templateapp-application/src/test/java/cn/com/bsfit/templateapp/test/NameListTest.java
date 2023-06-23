@@ -122,5 +122,15 @@ public class NameListTest extends AbstractTransactionalJUnit4SpringContextTests 
         com.baomidou.mybatisplus.extension.plugins.pagination.Page<NamelistRecord> namelistRecordPage = namelistRecordService.page(recordPage, namelistRecordQueryWrapper);
         Assertions.assertTrue(Objects.nonNull(namelistRecordPage));
     }
+    @DisplayName("判断是否在黑名单中")
+    @Test
+    public void existsNameListRecord() {
+        NamelistRecordVO namelistRecordVO = new NamelistRecordVO();
+        namelistRecordVO.setType(2);
+        namelistRecordVO.setNumber("15655562167");
+        boolean result = namelistRecordService.existsNameList(namelistRecordVO);
+        Assertions.assertFalse(result);
+
+    }
 
 }
