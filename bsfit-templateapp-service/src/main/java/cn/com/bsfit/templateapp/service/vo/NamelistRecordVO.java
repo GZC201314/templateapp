@@ -41,4 +41,6 @@ public class NamelistRecordVO implements Serializable {
     private Integer current;
     private Integer size;
 
+    private String delIds;
+
 }
