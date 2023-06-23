@@ -7,6 +7,6 @@ spring.application.name: namelist
 
 spring:
   profiles:
-    active: dev
+    active: mysql
 
 

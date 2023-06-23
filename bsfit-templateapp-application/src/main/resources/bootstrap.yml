@@ -10,9 +10,9 @@
 ################################################################################
 #  微服务相关配置
 ################################################################################
-#bsfit.common.cloud:
-#  ## 注册中心选型 nacos  /  eureka / consul
-#  discovery: nacos
+bsfit.common.cloud:
+  ## 注册中心选型 nacos  /  eureka / consul
+  discovery: nacos
 #  ## 配置中心选型 nacos  / consul
 #  config: nacos
 
