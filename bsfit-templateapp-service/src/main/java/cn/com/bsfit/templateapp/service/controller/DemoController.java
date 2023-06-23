@@ -5,18 +5,19 @@ import cn.com.bsfit.templateapp.service.entity.NamelistRecord;
 import cn.com.bsfit.templateapp.service.entity.NamelistType;
 import cn.com.bsfit.templateapp.service.service.INamelistRecordService;
 import cn.com.bsfit.templateapp.service.service.INamelistTypeService;
+import cn.com.bsfit.templateapp.service.utils.RedisUtil;
 import cn.com.bsfit.templateapp.service.vo.NamelistRecordVO;
 import cn.com.bsfit.templateapp.service.vo.NamelistTypeVO;
 import cn.hutool.core.collection.CollUtil;
-import cn.hutool.core.collection.CollectionUtil;
-import cn.hutool.core.util.StrUtil;
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.core.metadata.OrderItem;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import org.springframework.beans.BeanUtils;
-import org.springframework.context.annotation.Bean;
 import org.springframework.util.StringUtils;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
 import java.time.LocalDateTime;
@@ -38,6 +39,9 @@ public class DemoController {
     private INamelistTypeService namelistTypeService;
     @Resource
     private INamelistRecordService namelistRecordService;
+
+    @Resource
+    private RedisUtil redisUtil;
 
     @PostMapping("/addType")
     public BsfitResponse addType(@RequestBody NamelistTypeVO namelistTypeVO) {
@@ -73,6 +77,7 @@ public class DemoController {
             namelistRecord.setType(phoneNumberType.getId());
             boolean save = namelistRecordService.save(namelistRecord);
             if (save) {
+
                 return BsfitResponse.successWithMsg("新增黑名单成功");
             } else {
                 return BsfitResponse.failedWithError("新增黑名单失败");
@@ -114,8 +119,8 @@ public class DemoController {
         }
         List<OrderItem> orders = new ArrayList<>();
         OrderItem orderItem = new OrderItem();
-        orderItem.setColumn("modify_time"); // 设置排序字段为name
-        orderItem.setAsc(false); // 设置升序排序
+        orderItem.setColumn("modify_time");
+        orderItem.setAsc(false);
         orders.add(orderItem);
         Page<NamelistRecord> page = new Page<>(namelistRecordVO.getPage().getPage(), namelistRecordVO.getPage().getPageSize());
         page.setOrders(orders);
@@ -125,19 +130,35 @@ public class DemoController {
 
     @PostMapping("/deleteRecord")
     public BsfitResponse deleteRecord(@RequestBody NamelistRecordVO namelistRecordVO) {
-        if (Objects.isNull(namelistRecordVO) ) {
+        if (Objects.isNull(namelistRecordVO)|| !StringUtils.hasText(namelistRecordVO.getDelIds())||Objects.isNull(namelistRecordVO.getType())) {
             return BsfitResponse.failedWithError("删除黑名单失败,参数错误");
         }
         if (StringUtils.hasText(namelistRecordVO.getDelIds())) {
             String delIds = namelistRecordVO.getDelIds();
             String[] ids = delIds.split(",");
-            boolean result = namelistRecordService.removeByIds(Arrays.asList(ids));
+
+            QueryWrapper<NamelistRecord> queryWrapper = new QueryWrapper<>();
+            queryWrapper.eq("type",namelistRecordVO.getType());
+            queryWrapper.in("number",Arrays.asList(ids));
+            boolean result = namelistRecordService.remove(queryWrapper);
             if (result) {
+                for (String id : ids) {
+                    redisUtil.hset("bsfit:namelist:"+namelistRecordVO.getType()+":" + id.hashCode() % 2000, id,false);
+                }
                 return BsfitResponse.successWithMsg("删除黑名单成功");
             }
             return BsfitResponse.failedWithError("删除黑名单失败");
         }
         return BsfitResponse.failedWithError("删除黑名单失败,参数错误");
+    }
+
+    @PostMapping("/existNameList")
+    public BsfitResponse existNameList(@RequestBody NamelistRecordVO namelistRecordVO) {
+        if (Objects.isNull(namelistRecordVO) || Objects.isNull(namelistRecordVO.getType())||!StringUtils.hasText(namelistRecordVO.getNumber())) {
+            return BsfitResponse.failedWithError("参数错误");
+        }
+        boolean result = namelistRecordService.existsNameList(namelistRecordVO);
+        return BsfitResponse.successWithData(result);
     }
 
 }
