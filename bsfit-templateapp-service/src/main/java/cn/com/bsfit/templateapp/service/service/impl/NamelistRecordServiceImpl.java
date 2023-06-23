@@ -10,6 +10,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.Resource;
+import java.time.LocalDateTime;
 import java.util.List;
 
 /**
@@ -33,13 +34,13 @@ public class NamelistRecordServiceImpl extends ServiceImpl<NamelistRecordMapper,
     public boolean existsNameList(NamelistRecordVO namelistRecordVO) {
         Object hget = redisUtil.hget("bsfit:namelist:" + namelistRecordVO.getType() + ":" + namelistRecordVO.getNumber().hashCode() % 2000, namelistRecordVO.getNumber());
 
-        System.out.println(hget);
         if (hget!=null){
             return (boolean) hget;
         }
         QueryWrapper<NamelistRecord> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("type",namelistRecordVO.getType());
         queryWrapper.eq("number",namelistRecordVO.getNumber());
+        queryWrapper.ge("expires", LocalDateTime.now());
         int count = namelistRecordMapper.selectCount(queryWrapper);
         redisUtil.hset("bsfit:namelist:"+namelistRecordVO.getType()+":"+namelistRecordVO.getNumber().hashCode()%2000,namelistRecordVO.getNumber(),count>0);
         return count>0;
