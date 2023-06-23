@@ -39,29 +39,50 @@
             </includes>
         </fileSet>
         <fileSet>
-            <directory>${project.basedir}/../bsfit-templateapp-service/src/main/java</directory>
-            <outputDirectory>/</outputDirectory>
+            <directory>${project.basedir}/../bsfit-templateapp-service</directory>
+            <outputDirectory>/templateapp/bsfit-templateapp-service</outputDirectory>
             <includes>
-                <include>**</include>
+                <include>/src/**</include>
+                <include>pom.xml</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>${project.basedir}/..</directory>
+            <outputDirectory>/templateapp</outputDirectory>
+            <includes>
+                <include>pom.xml</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>${project.basedir}/../bsfit-templateapp-client</directory>
+            <outputDirectory>/templateapp/bsfit-templateapp-client</outputDirectory>
+            <includes>
+                <include>/src/**</include>
+                <include>pom.xml</include>
             </includes>
         </fileSet>
         <fileSet>
             <directory>${project.basedir}/../.git</directory>
-            <outputDirectory>/.git</outputDirectory>
+            <outputDirectory>/templateapp/.git</outputDirectory>
             <includes>
                 <include>**</include>
             </includes>
         </fileSet>
         <fileSet>
-            <directory>${project.basedir}/src/main/java</directory>
-            <outputDirectory>/</outputDirectory>
+            <directory>${project.basedir}</directory>
+            <outputDirectory>/templateapp/bsfit-templateapp-application</outputDirectory>
             <includes>
-                <include>**</include>
+                <include>/assembly/**</include>
+                <include>/doc/**</include>
+                <include>/init/**</include>
+                <include>/sql/**</include>
+                <include>/src/**</include>
+                <include>pom.xml</include>
             </includes>
         </fileSet>
         <fileSet>
-            <directory>${project.basedir}/src/test/java</directory>
-            <outputDirectory>/</outputDirectory>
+            <directory>${project.basedir}/src/test</directory>
+            <outputDirectory>/templateapp/bsfit-templateapp-application/src/test</outputDirectory>
             <includes>
                 <include>**</include>
             </includes>
