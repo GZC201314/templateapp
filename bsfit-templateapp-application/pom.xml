@@ -274,7 +274,7 @@
                     <artifactId>spring-boot-maven-plugin</artifactId>
                     <version>2.0.6.RELEASE</version>
                     <configuration>
-                        <mainClass>cn.com.bsfit.optimizer.DorApplication</mainClass>
+                        <mainClass>cn.com.bsfit.templateapp.Application</mainClass>
                         <excludes>
                             <!--排除了bsfit-decision-task.zip 的依赖，不让他打进到springboot创建包的BOOT-INF/lib下-->
                             <exclude>

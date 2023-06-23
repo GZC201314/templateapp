@@ -6,13 +6,13 @@
         <format>zip</format>
     </formats>
     <fileSets>
-        <fileSet>
-            <directory>${project.parent.basedir}</directory>
-            <outputDirectory>/</outputDirectory>
-            <includes>
-                <include>doc/**/*</include>
-            </includes>
-        </fileSet>
+<!--        <fileSet>-->
+<!--            <directory>${project.parent.basedir}</directory>-->
+<!--            <outputDirectory>/</outputDirectory>-->
+<!--            <includes>-->
+<!--                <include>doc/**/*</include>-->
+<!--            </includes>-->
+<!--        </fileSet>-->
         <fileSet>
             <directory>${project.basedir}</directory>
             <outputDirectory>/</outputDirectory>
@@ -20,13 +20,29 @@
                 <include>log4j2.xml</include>
             </includes>
         </fileSet>
-
+        <fileSet>
+            <directory>${project.basedir}</directory>
+            <outputDirectory>./</outputDirectory>
+            <includes>
+                <include>sql/**</include>
+                <include>init/**</include>
+                <include>doc/**</include>
+            </includes>
+        </fileSet>
         <fileSet>
             <directory>${project.basedir}/src/main/resources</directory>
             <outputDirectory>/</outputDirectory>
             <includes>
                 <include>application*.yml</include>
+                <include>application-*.yaml</include>
                 <include>bootstrap.yml</include>
+            </includes>
+        </fileSet>
+        <fileSet>
+            <directory>${project.basedir}/src/main/java</directory>
+            <outputDirectory>/</outputDirectory>
+            <includes>
+                <include>**</include>
             </includes>
         </fileSet>
         <fileSet>
