@@ -42,7 +42,7 @@ public class NameListTest extends AbstractTransactionalJUnit4SpringContextTests 
     public void addNameListType() {
 
             NamelistType namelistType = new NamelistType();
-            namelistType.setName("testNUmber");
+            namelistType.setName("testNUmber2");
             boolean save = namelistTypeService.save(namelistType);
             Assertions.assertTrue(save);
     }
@@ -72,8 +72,8 @@ public class NameListTest extends AbstractTransactionalJUnit4SpringContextTests 
     @Test
     public void updateNameListRecord() {
         NamelistRecordVO namelistRecordVO = new NamelistRecordVO();
-        namelistRecordVO.setId(1);
-        namelistRecordVO.setNumber("15655552168");
+        namelistRecordVO.setId(31);
+        namelistRecordVO.setNumber("13555964395");
         // 查询新值是否已存在
         QueryWrapper<NamelistRecord> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("number",namelistRecordVO.getNumber());
@@ -92,8 +92,8 @@ public class NameListTest extends AbstractTransactionalJUnit4SpringContextTests 
     @Test
     public void updateNameListRecord1() {
         NamelistRecordVO namelistRecordVO = new NamelistRecordVO();
-        namelistRecordVO.setId(1);
-        namelistRecordVO.setNumber("17366192087");
+        namelistRecordVO.setId(32);
+        namelistRecordVO.setNumber("13555964395");
         // 查询新值是否已存在
         QueryWrapper<NamelistRecord> queryWrapper = new QueryWrapper<>();
         queryWrapper.eq("number",namelistRecordVO.getNumber());
@@ -114,6 +114,7 @@ public class NameListTest extends AbstractTransactionalJUnit4SpringContextTests 
         Page page = new Page();
         page.setPage(1);
         page.setPageSize(10);
+        namelistRecordVO.setPage(page);
         QueryWrapper<NamelistRecord> namelistRecordQueryWrapper = new QueryWrapper<>();
         if (StringUtils.hasText(namelistRecordVO.getNumber())){
             namelistRecordQueryWrapper.like("number",namelistRecordVO.getNumber());
@@ -127,7 +128,7 @@ public class NameListTest extends AbstractTransactionalJUnit4SpringContextTests 
     public void existsNameListRecord() {
         NamelistRecordVO namelistRecordVO = new NamelistRecordVO();
         namelistRecordVO.setType(2);
-        namelistRecordVO.setNumber("15655562167");
+        namelistRecordVO.setNumber("13555964395");
         boolean result = namelistRecordService.existsNameList(namelistRecordVO);
         Assertions.assertFalse(result);
 
