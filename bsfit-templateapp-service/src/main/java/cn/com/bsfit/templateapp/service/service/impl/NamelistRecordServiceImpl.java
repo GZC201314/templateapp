@@ -32,7 +32,7 @@ public class NamelistRecordServiceImpl extends ServiceImpl<NamelistRecordMapper,
 
     @Override
     public boolean existsNameList(NamelistRecordVO namelistRecordVO) {
-        Object hget = redisUtil.hget("bsfit:namelist:" + namelistRecordVO.getType() + ":" + namelistRecordVO.getNumber().hashCode() % 2000, namelistRecordVO.getNumber());
+        Object hget = redisUtil.hget("bsfit:namelist:" + namelistRecordVO.getType() + ":" + Math.abs(namelistRecordVO.getNumber().hashCode()) % 2000, namelistRecordVO.getNumber());
 
         if (hget!=null){
             return (boolean) hget;
@@ -42,7 +42,7 @@ public class NamelistRecordServiceImpl extends ServiceImpl<NamelistRecordMapper,
         queryWrapper.eq("number",namelistRecordVO.getNumber());
         queryWrapper.ge("expires", LocalDateTime.now());
         int count = namelistRecordMapper.selectCount(queryWrapper);
-        redisUtil.hset("bsfit:namelist:"+namelistRecordVO.getType()+":"+namelistRecordVO.getNumber().hashCode()%2000,namelistRecordVO.getNumber(),count>0);
+        redisUtil.hset("bsfit:namelist:"+namelistRecordVO.getType()+":"+Math.abs(namelistRecordVO.getNumber().hashCode())%2000,namelistRecordVO.getNumber(),count>0);
         return count>0;
     }
 }

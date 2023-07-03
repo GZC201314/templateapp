@@ -99,6 +99,9 @@ public class DemoController {
             return BsfitResponse.failedWithError("修改后的值已在名单中，请重新输入后再试");
         }
         NamelistRecord oldNamelistRecord = namelistRecordService.getById(namelistRecordVO.getId());
+        if (Objects.isNull(oldNamelistRecord)){
+            return BsfitResponse.failedWithError("更新黑名单失败");
+        }
         oldNamelistRecord.setNumber(namelistRecordVO.getNumber());
         oldNamelistRecord.setModifyTime(LocalDateTime.now());
         boolean result = namelistRecordService.updateById(oldNamelistRecord);
